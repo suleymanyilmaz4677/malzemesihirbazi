@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malzeme Sihirbazı</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #fef2f2; padding: 2rem; }
+    .card { background: white; border-radius: 1rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 2rem; max-width: 800px; margin:auto; }
+    .spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid #ef4444; border-radius: 50%; width:24px; height:24px; animation: spin 1s linear infinite;}
+    @keyframes spin { to {transform:rotate(360deg);} }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1 class="text-3xl font-bold text-center text-red-600 mb-4">🍳 Malzeme Sihirbazı</h1>
+    <p class="text-center text-gray-600 mb-6">Evdeki malzemeleri gir, AI sana 3 tarif önerisi versin!</p>
+
+    <label class="font-semibold">Malzemeler (virgülle ayır):</label>
+    <input id="ingredients" type="text" class="w-full border p-2 rounded mb-3" placeholder="örnek: yumurta, domates, peynir" />
+
+    <label class="font-semibold">Filtre (isteğe bağlı):</label>
+    <input id="filters" type="text" class="w-full border p-2 rounded mb-4" placeholder="örnek: diyet, 30 dakikadan kısa" />
+
+    <button id="btn" class="bg-red-600 text-white px-4 py-2 rounded w-full font-semibold">3 Tarif Önerisi Bul</button>
+    <div id="spinner" class="spinner mx-auto my-4 hidden"></div>
+    <div id="result" class="mt-4"></div>
+  </div>
+
+  <script>
+    const btn = document.getElementById('btn');
+    const spinner = document.getElementById('spinner');
+    const result = document.getElementById('result');
+
+    btn.addEventListener('click', async () => {
+      const ingredients = document.getElementById('ingredients').value.trim();
+      const filters = document.getElementById('filters').value.trim();
+      if (!ingredients) return alert('Lütfen malzemeleri girin.');
+      
+      spinner.classList.remove('hidden');
+      result.innerHTML = '';
+
+      // NOT: Gerçek API çağrısı sunucu tarafında yapılmalı. Bu demo yerel test içindir.
+      // Güvenlik nedeniyle burada API anahtarı kullanılmaz.
+      // İleride backend eklediğimizde buradan /api/suggest'e gönderilecek.
+
+      setTimeout(() => {
+        spinner.classList.add('hidden');
+        result.innerHTML = `
+          <div class="bg-red-50 border border-red-200 p-4 rounded">
+            <h2 class="text-xl font-bold text-red-700 mb-2">Örnek Tarif: Domatesli Omlet</h2>
+            <p class="text-gray-700">Malzemeler: ${ingredients}</p>
+            <p class="text-gray-700">Filtre: ${filters || "Yok"}</p>
+            <ul class="list-disc pl-5 text-gray-700 mt-2">
+              <li>Yumurtaları çırpın.</li>
+              <li>Domatesleri doğrayıp ekleyin.</li>
+              <li>Tavada 5 dakika pişirin. Afiyet olsun!</li>
+            </ul>
+          </div>
+        `;
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
